@@ -62,7 +62,7 @@ test('no unhandled browser errors on the public journey', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'Get Started', exact: true }).click();
   await page.getByRole('link', { name: 'This feels like me' }).click();
-  await page.getByRole('link', { name: 'Privacy & AI', exact: false }).first().click();
-  await expect(page.getByRole('heading', { name: 'Privacy & AI', exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'Privacy & recommendations', exact: false }).first().click();
+  await expect(page.getByRole('heading', { name: 'Privacy & recommendations', exact: true })).toBeVisible();
   expect(errors).toEqual([]);
 });
