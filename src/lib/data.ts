@@ -25,18 +25,32 @@ export const viewer = cache(async () => {
 });
 export async function workspaceData() {
   const { db, user, profile } = await viewer();
-  const [assignments, courses, availability] = await Promise.all([
-    db.from('assignments').select('*').eq('user_id', user.id).order('due_date'),
-    db.from('courses').select('*').eq('user_id', user.id).order('name'),
-    db
-      .from('weekly_availability')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('weekday')
-      .order('start_time'),
-  ]);
-  if (assignments.error || courses.error || availability.error)
-    throw new Error('Your workspace could not be loaded. Check your connection and retry.');
+  // All three requests are read-only; one bounded retry handles occasional network/API hiccups.
+  const load = () =>
+    Promise.all([
+      db.from('assignments').select('*').eq('user_id', user.id).order('due_date'),
+      db.from('courses').select('*').eq('user_id', user.id).order('name'),
+      db
+        .from('weekly_availability')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('weekday')
+        .order('start_time'),
+    ]);
+  let [assignments, courses, availability] = await load();
+  if (assignments.error || courses.error || availability.error) {
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    [assignments, courses, availability] = await load();
+  }
+  if (assignments.error || courses.error || availability.error) {
+    // Log only database error codes, never tokens, user IDs or assignment contents.
+    console.error('Tasketh workspace read failed', {
+      assignments: assignments.error?.code ?? null,
+      courses: courses.error?.code ?? null,
+      availability: availability.error?.code ?? null,
+    });
+    throw new Error('Your workspace could not be loaded. Please retry.');
+  }
   return {
     profile,
     assignments: assignments.data!,
