@@ -9,7 +9,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: { default: 'Tasketh — Less planning. More doing.', template: '%s · Tasketh' },
   description:
-    'Your AI-powered study decision assistant. Turn a little free time into meaningful progress.',
+    'Your smart study decision assistant. Turn a little free time into meaningful progress.',
   icons: { icon: '/icon.svg' },
 };
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
