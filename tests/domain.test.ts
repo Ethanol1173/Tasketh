@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { assignmentSchema, signupSchema, sessionSchema, dateSchema } from '@/lib/schemas';
-import { splitAndValidateBlocks, deadlineInstant } from '@/lib/time';
+import { splitAndValidateBlocks, deadlineInstant, displayDeadline } from '@/lib/time';
 import {
   fallbackRecommendation,
   rankAssignments,
@@ -71,6 +71,16 @@ describe('timezone-aware deadlines and recurring availability', () => {
   it('uses end of day in the profile timezone', () => {
     expect(deadlineInstant('2026-10-25', null, 'Asia/Taipei').toISOString()).toBe(
       '2026-10-25T15:59:59.000Z',
+    );
+  });
+  it('renders deadlines without a specified due time as a literal end-of-day label', () => {
+    expect(displayDeadline('2026-10-25', null, 'Asia/Taipei')).toBe(
+      'Oct 25, 2026 · end of day',
+    );
+  });
+  it('renders deadlines with an explicit due time', () => {
+    expect(displayDeadline('2026-10-25', '12:00', 'Asia/Taipei')).toBe(
+      'Oct 25, 2026 · 12:00 PM',
     );
   });
   it('handles a daylight-saving timezone', () => {
