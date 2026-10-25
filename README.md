@@ -64,9 +64,9 @@ cloud-specific export.
 
 Use **only** project reference `kxgiipiaxwxmzuuskvjw`. Do not create another project or reset this database.
 
-The initial migration is `supabase/migrations/20261025000100_tasketh.sql`. It creates `profiles`, `courses`, `assignments`, `weekly_availability`, and the private `tasketh_recommendation_limits` table. The last table supports rate limiting and duplicate prevention; it is not a history feature.
+The initial migration is `supabase/migrations/20261025160439_tasketh_initial_schema.sql`. It creates `profiles`, `courses`, `assignments`, `weekly_availability`, and the private `tasketh_recommendation_limits` table. The last table supports rate limiting and duplicate prevention; it is not a history feature.
 
-**The remote schema must be inspected before applying the migration.** Its preflight refuses any existing table with these names instead of silently replacing or assuming compatibility. If the project already contains auth users, inspect their profile needs and safely adapt the profile migration before allowing registration. Nothing automatically resets, backfills, or drops existing data.
+**The initial migration has been applied to the existing Supabase project, followed by `20261025160552_tasketh_function_permissions_hardening.sql`. Do not reapply either migration.** When working on another project or revising the schema, first inspect the remote schema and migration history. Its preflight refuses any existing table with these names instead of silently replacing or assuming compatibility. The project had no Auth users when the initial migration was deployed; for future schema changes, review existing Auth users and profile needs first. Nothing automatically resets, backfills, or drops existing data.
 
 1. Authenticate the installed Supabase CLI securely and inspect the existing project and migration history:
 
