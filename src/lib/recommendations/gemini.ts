@@ -18,7 +18,13 @@ export async function recommend(
 ): Promise<Recommendation | null> {
   const now = new Date();
   const fallback = fallbackRecommendation(assignments, minutes, timezone, now);
-  if (!fallback || !process.env.GEMINI_API_KEY) return fallback;
+  // Rules are the default and do not require an external AI provider.
+  // Gemini can be re-enabled explicitly after its integration is verified.
+  if (
+    !fallback ||
+    process.env.TASKETH_RECOMMENDATION_MODE !== 'gemini' ||
+    !process.env.GEMINI_API_KEY
+  ) return fallback;
   const ranked = rankAssignments(assignments, minutes, timezone, now);
   // The top 40 candidates bound tokens and latency. A large task remains eligible.
   const candidates = ranked.slice(0, 40);
