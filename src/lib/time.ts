@@ -8,7 +8,7 @@ export function displayDeadline(date: string, time: string | null, timezone: str
   return formatInTimeZone(
     deadlineInstant(date, time, timezone),
     timezone,
-    time ? 'MMM d, yyyy · h:mm a' : 'MMM d, yyyy · end of day',
+    time ? 'MMM d, yyyy · h:mm a' : "MMM d, yyyy · 'end of day'",
   );
 }
 export function splitAndValidateBlocks(blocks: Block[]): Block[] {
