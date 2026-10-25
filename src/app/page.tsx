@@ -192,7 +192,7 @@ export default function Home() {
       <footer className="public-footer">
         <Brand />
         <span>Made for a little less overwhelm.</span>
-        <Link href="/privacy">Privacy & AI</Link>
+        <Link href="/privacy">Privacy & recommendations</Link>
       </footer>
     </div>
   );
