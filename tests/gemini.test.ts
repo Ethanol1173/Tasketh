@@ -43,6 +43,7 @@ describe('provider orchestration (SDK boundary mocked; not a live API test)', ()
     expect(payload.contents).not.toContain('unit-test-only');
   });
   it('falls back on API failure and invalid output', async () => {
+    vi.stubEnv('TASKETH_RECOMMENDATION_MODE', 'gemini');
     vi.stubEnv('GEMINI_API_KEY', 'unit-test-only');
     generateContent.mockRejectedValueOnce(new Error('provider unavailable'));
     expect((await recommend([assignment()], [], 30, 'UTC'))?.source).toBe('fallback');
