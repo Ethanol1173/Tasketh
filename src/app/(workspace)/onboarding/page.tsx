@@ -80,6 +80,7 @@ export default async function OnboardingPage({
       {step === 3 && (
         <>
           <RecommendationComposer
+        aiEnabled={process.env.TASKETH_RECOMMENDATION_MODE === 'gemini'}
             assignments={assignments}
             courses={courses}
             timezone={profile.timezone}
