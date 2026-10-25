@@ -17,7 +17,14 @@ describe('provider orchestration (SDK boundary mocked; not a live API test)', ()
     expect((await recommend([assignment()], [], 30, 'UTC'))?.source).toBe('fallback');
     expect(generateContent).not.toHaveBeenCalled();
   });
-  it('uses validated structured output and omits private account fields', async () => {
+  it('uses rules by default even when a Gemini key is present', async () => {
+    vi.stubEnv('TASKETH_RECOMMENDATION_MODE', 'rules');
+    vi.stubEnv('GEMINI_API_KEY', 'unit-test-only');
+    expect((await recommend([assignment()], [], 30, 'UTC'))?.source).toBe('fallback');
+    expect(generateContent).not.toHaveBeenCalled();
+  });
+  it('uses validated structured output and omits private account fields when Gemini is enabled', async () => {
+    vi.stubEnv('TASKETH_RECOMMENDATION_MODE', 'gemini');
     vi.stubEnv('GEMINI_API_KEY', 'unit-test-only');
     generateContent.mockResolvedValue({
       text: JSON.stringify({
