@@ -63,8 +63,16 @@ export async function recommend(
       minutes,
     );
     return result ? { ...result, source: 'gemini' } : fallback;
-  } catch {
-    // Deliberately omit provider payloads, assignment text and credentials from logs.
+  } catch (error) {
+    // Only report the provider's status and error class. Never log prompts, API keys or user data.
+    const status =
+      typeof error === 'object' && error !== null && 'status' in error
+        ? (error as { status?: unknown }).status
+        : undefined;
+    console.warn('Tasketh Gemini request used priority fallback', {
+      providerStatus: typeof status === 'number' ? status : null,
+      errorClass: error instanceof Error ? error.name : 'unknown',
+    });
     return fallback;
   }
 }
