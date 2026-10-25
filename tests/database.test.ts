@@ -16,7 +16,7 @@ beforeAll(async () => {
   await db.exec(
     `create schema auth; create role authenticated; create role anon; create table auth.users(id uuid primary key,raw_user_meta_data jsonb not null); create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth,public to authenticated,anon; grant execute on function auth.uid() to authenticated,anon;`,
   );
-  await db.exec(readFileSync('supabase/migrations/20261025000100_tasketh.sql', 'utf8'));
+  await db.exec(readFileSync('supabase/migrations/20261025160439_tasketh_initial_schema.sql', 'utf8'));
 });
 beforeEach(async () => {
   await db.exec(
