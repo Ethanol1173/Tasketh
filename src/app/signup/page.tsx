@@ -12,6 +12,13 @@ export default function SignupPage() {
         Already here? <Link href="/login">Log in</Link> ·{' '}
         <Link href="/onboarding/theme">Change your vibe</Link>
       </p>
+      <p className="helper" style={{ textAlign: 'center', marginTop: 12 }}>
+        Learn how Tasketh handles your study data in{' '}
+        <Link href="/privacy" className="text-link">
+          Privacy &amp; recommendations
+        </Link>
+        .
+      </p>
     </AuthShell>
   );
 }
