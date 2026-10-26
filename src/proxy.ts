@@ -22,6 +22,16 @@ export async function proxy(request: NextRequest) {
   await db.auth.getUser();
   return response;
 }
+// Only authenticated workspaces need server-side session refresh on navigation.
+// Public landing/login/signup assets avoid an unnecessary Auth round-trip.
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|woff2)$).*)'],
+  matcher: [
+    '/dashboard/:path*',
+    '/assignments/:path*',
+    '/courses/:path*',
+    '/schedule/:path*',
+    '/settings/:path*',
+    '/recommendation/:path*',
+    '/onboarding',
+  ],
 };
