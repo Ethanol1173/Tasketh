@@ -13,13 +13,11 @@ export function RecommendationComposer({
   courses,
   timezone,
   onboarding = false,
-  aiEnabled = false,
 }: {
   assignments: Assignment[];
   courses: Course[];
   timezone: string;
   onboarding?: boolean;
-  aiEnabled?: boolean;
 }) {
   const [minutes, setMinutes] = useState('30'),
     [custom, setCustom] = useState(false),
@@ -118,12 +116,6 @@ export function RecommendationComposer({
             {pending ? 'Finding your next step…' : 'Find My Next Task'}
             {!pending && <ArrowRight size={16} />}
           </button>
-          <p className="ai-disclosure">
-            {aiEnabled
-              ? 'Tasketh may use Google Gemini to assess your assignments; when unavailable, it uses transparent priority rules.'
-              : 'Tasketh uses clear priority rules based on deadlines, grade impact, and available study time. No assignment details are sent to Google Gemini.'}{' '}
-            <Link href="/privacy">Privacy & recommendations</Link>
-          </p>
         </form>
         {!assignments.some((a) => a.status !== 'completed') && (
           <p className="notice success">
@@ -195,12 +187,6 @@ export function RecommendationComposer({
               </p>
               <p>{result.alternative_reason}</p>
             </div>
-          )}
-          {result.source === 'fallback' && (
-            <p className="helper" style={{ marginTop: 20 }}>
-              Based on deadline urgency (50%), estimated grade weight (35%), and session suitability
-              (15%). This is a rule-based recommendation, not AI-generated advice or a prediction of grades.
-            </p>
           )}
         </section>
       )}
