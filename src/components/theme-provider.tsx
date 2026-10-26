@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { themes, type Theme } from '@/lib/themes';
 import { Check } from 'lucide-react';
 const ThemeContext = createContext<{ theme: Theme; setTheme: (theme: Theme) => void }>({
@@ -14,13 +14,23 @@ export function ThemeProvider({
   children: React.ReactNode;
 }) {
   const [theme, updateTheme] = useState(initialTheme);
-  function setTheme(value: Theme) {
+  const setTheme = useCallback((value: Theme) => {
     updateTheme(value);
     document.documentElement.dataset.theme = value;
     document.cookie = `tasketh-theme=${value};path=/;max-age=31536000;SameSite=Lax${location.protocol === 'https:' ? ';Secure' : ''}`;
-  }
+  }, []);
   return <ThemeContext value={{ theme, setTheme }}>{children}</ThemeContext>;
 }
+// Restore the theme stored on the signed-in profile, including on a new device.
+// This runs once after the protected workspace loads; public pages never query Auth.
+export function AuthenticatedThemeSync({ savedTheme }: { savedTheme: Theme }) {
+  const { setTheme } = useTheme();
+  useEffect(() => {
+    setTheme(savedTheme);
+  }, [savedTheme, setTheme]);
+  return null;
+}
+
 export function useTheme() {
   return useContext(ThemeContext);
 }
