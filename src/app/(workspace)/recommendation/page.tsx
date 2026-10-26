@@ -12,7 +12,6 @@ export default async function RecommendationPage() {
         </div>
       </header>
       <RecommendationComposer
-        aiEnabled={process.env.TASKETH_RECOMMENDATION_MODE === 'gemini'}
         assignments={assignments}
         courses={courses}
         timezone={profile.timezone}
