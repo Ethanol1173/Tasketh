@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   icons: { icon: '/icon.svg' },
 };
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  let theme = validTheme((await cookies()).get('tasketh-theme')?.value);
+  const theme = validTheme((await cookies()).get('tasketh-theme')?.value);
   return (
     <html lang="en" data-theme={theme} className={GeistSans.variable}>
       <body>
